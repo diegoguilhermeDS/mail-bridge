@@ -99,7 +99,6 @@ def send_email_with_attachment(subject, message, attachment_path=None):
     body = f"""
     <html>
     <body>
-        <p>Prezados,</p>
         <p>{message}</p>
     </body>
     </html>
