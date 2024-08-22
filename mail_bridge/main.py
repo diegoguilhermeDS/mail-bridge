@@ -8,7 +8,7 @@ from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email import encoders
 
-from exceptions import (
+from .exceptions import (
     AuthenticationError,
     EmailEncodingError,
     SMTPGenericError,
