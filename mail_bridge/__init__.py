@@ -1,4 +1,4 @@
-from .main import send_email_with_attachment, send_email_without_attachment
+from .main import send_email
 from .exceptions import (
     ConfigurationError,
     AuthenticationError,
