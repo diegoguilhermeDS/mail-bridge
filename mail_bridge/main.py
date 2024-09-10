@@ -32,7 +32,7 @@ if not all([SENDER, PASSWORD, RECIPIENT]):
     raise ConfigurationError("SENDER, PASSWORD, and RECIPIENT must all be provided.")
 
 
-def create_email_message(sender, recipient, subject, body, attachment_path):
+def create_email_message(sender, recipient, subject, body, attachment_path, name_file):
     """Creates an email message with the specified parameters."""
     msg = MIMEMultipart()
     msg["From"] = sender
@@ -44,12 +44,12 @@ def create_email_message(sender, recipient, subject, body, attachment_path):
 
     # Attach file
     if attachment_path:
-        attach_file_to_email(msg, attachment_path)
+        attach_file_to_email(msg, attachment_path, name_file)
 
     return msg
 
 
-def attach_file_to_email(msg, file_path):
+def attach_file_to_email(msg, file_path, name_file):
     """Attaches a file to the email message."""
     part = MIMEBase("application", "octet-stream")
     with open(file_path, 'rb') as file:
@@ -60,7 +60,7 @@ def attach_file_to_email(msg, file_path):
     time = datetime.now().strftime('%H-%M-%S')
     part.add_header(
         "Content-Disposition",
-        f'attachment; filename="santander-producao-{today}_{time}.xlsx"',
+        f'attachment; filename="{name_file}-{today}_{time}.xlsx"',
     )
     msg.attach(part)
 
@@ -94,7 +94,7 @@ def send_email_via_smtp(msg, password):
         server.quit()
 
 
-def send_email_with_attachment(subject, message, attachment_path=None):
+def send_email(subject, message, attachment_path=None, name_file=None):
     """Main function to send an email with the Excel file attachment."""
     body = f"""
     <html>
@@ -103,19 +103,7 @@ def send_email_with_attachment(subject, message, attachment_path=None):
     </body>
     </html>
     """
-    msg = create_email_message(SENDER, RECIPIENT, subject, body, attachment_path)
+    msg = create_email_message(SENDER, RECIPIENT, subject, body, attachment_path, name_file)
     send_email_via_smtp(msg, PASSWORD)
 
 
-def send_email_without_attachment(subject, message, attachment_path=None):
-    """Main function to send an email without file attachment."""
-    body = f"""
-    <html>
-    <body>
-        <p>Prezados,</p>
-        <p>{message}</p>
-    </body>
-    </html>
-    """
-    msg = create_email_message(SENDER, RECIPIENT, subject, body, attachment_path)
-    send_email_via_smtp(msg, PASSWORD)
