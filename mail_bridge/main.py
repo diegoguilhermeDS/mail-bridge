@@ -44,7 +44,7 @@ def send_email(access_token, subject, body, recipients, user_email, attachments=
         response = requests.post(url, headers=headers, json=email_msg)
 
         if response.status_code == 202:
-            logging.info("E-mail enviado com sucesso!")
+            logging.info("\033[32mE-mail enviado com sucesso!\033[0m")
             return True, "E-mail enviado com sucesso"
         elif response.status_code == 401:
             logging.error("Erro de autenticação. Verifique o token.")
@@ -63,7 +63,7 @@ def send_email(access_token, subject, body, recipients, user_email, attachments=
         logging.exception("Erro inesperado ao enviar o e-mail")
         return False, f"Erro inesperado: {str(e)}"
     finally:
-        logging.info("Função send_email finalizada.")
+        logging.info("\033[32mFunção send_email finalizada.\033[0m")
 
 
 def encode_file(file_path):
